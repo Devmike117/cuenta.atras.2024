@@ -1,45 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2023</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="page-title">Cuenta regresiva</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 </head>
-
 <body>
-            <audio autoplay loop>
-                <source src="music/Mecano - Un año más.mp3">
-            </audio>
-              
+    <audio autoplay loop>
+        <source src="music/Mecano - Un año más.mp3" />
+    </audio>
+
     <section class="container">
-        <h1>¡2025¡</h1>
+        <h1>¡<span id="current-year">2025</span>!</h1>
         <h1>Faltan:</h1>
         <div class="countdown">
-            <div>
-                <p id="days">132</p>
-                <span>Dias</span>
-            </div>
-            <div>
-                <p id="hours">15</p>
-                <span>Horas</span>
-            </div>
-            <div>
-                <p id="minutes">25</p>
-                <span>Minutos</span>
-            </div>
-            <div>
-                <p id="seconds">45</p>
-                <span>Segundos</span>
-            </div>
+            <div><p id="days">0</p><span>Días</span></div>
+            <div><p id="hours">0</p><span>Horas</span></div>
+            <div><p id="minutes">0</p><span>Minutos</span></div>
+            <div><p id="seconds">00</p><span>Segundos</span></div>
         </div>
     </section>
-    <section class="final-sms"><h2>¡¡FELIZ AÑO NUEVO 2026!!🍷🎆🎉  </h2></section>
+
+    <section class="final-sms">
+        <h2 id="final-msg"></h2>
+    </section>
+
     <h2><br>De parte mía :)</h2>
-    <script src="script.js"></script>
+
+    <script>
+        const $days = document.getElementById('days'),
+              $hours = document.getElementById('hours'),
+              $minutes = document.getElementById('minutes'),
+              $seconds = document.getElementById('seconds'),
+              $finalMessage = document.querySelector('.final-sms');
+
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const nextYear = currentYear + 1;
+        const countdownDate = new Date(`01/01/${nextYear} 00:00:00`).getTime();
+
+        // Actualizar dinámicamente el año actual, título y mensaje final
+        document.getElementById('current-year').textContent = currentYear;
+        document.title = `Cuenta regresiva ${currentYear}`;
+        document.getElementById('final-msg').innerHTML = `¡¡FELIZ AÑO NUEVO ${nextYear}!! 🍷🎆🎉`;
+
+        let interval = setInterval(function () {
+            const currentTime = new Date().getTime();
+            let distance = countdownDate - currentTime;
+
+            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            $days.innerHTML = days;
+            $hours.innerHTML = hours;
+            $minutes.innerHTML = minutes;
+            $seconds.innerHTML = ('0' + seconds).slice(-2);
+
+            if (distance < 0) {
+                clearInterval(interval);
+                $finalMessage.style.transform = 'translateY(0)';
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
+
